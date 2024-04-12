@@ -235,3 +235,38 @@ func FindDifferenceWithStr(A, B []string) (toDelete []string, toAdd []string) {
 
 	return toDelete, toAdd
 }
+
+// 过滤字符串
+func TrimString(s string) string {
+	if s == "" {
+		return ""
+	}
+	r := []rune(s)
+	for i, ch := range r {
+		switch {
+		case ch == '\'':
+			r[i] = 0
+		case ch == '\r':
+			r[i] = 0
+		case ch == '\n':
+			r[i] = 0
+		case ch == '\t':
+			r[i] = 0
+		case ch == '`':
+			r[i] = 0
+		case ch == '"':
+			r[i] = 0
+		}
+	}
+	return string(r)
+}
+
+// 日期转时间戳
+func GetTimestamp(d string) int64 {
+	loc, _ := time.LoadLocation("Local")
+	the_time, err := time.ParseInLocation("2006-01-02 15:04:05", d, loc)
+	if err == nil {
+		return the_time.Unix()
+	}
+	return 0
+}
