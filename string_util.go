@@ -186,3 +186,52 @@ func SortMd5(s ...string) string {
 	h.Write([]byte(strings.Join(s, "")))
 	return strings.ToUpper(fmt.Sprintf("%x", h.Sum(nil)))
 }
+
+func FindDifferenceWithInt(A, B []int) (toDelete []int, toAdd []int) {
+	setA := make(map[int]bool)
+	setB := make(map[int]bool)
+	for _, num := range A {
+		setA[num] = true
+	}
+	for _, num := range B {
+		setB[num] = true
+	}
+	for num := range setA {
+		if !setB[num] {
+			toDelete = append(toDelete, num)
+		}
+	}
+	for num := range setB {
+		if !setA[num] {
+			toAdd = append(toAdd, num)
+		}
+	}
+
+	return toDelete, toAdd
+}
+
+// A不在B中 返回C
+// B不在A中 返回D
+func FindDifferenceWithStr(A, B []string) (toDelete []string, toAdd []string) {
+	setA := make(map[string]bool)
+	setB := make(map[string]bool)
+	for _, num := range A {
+		setA[num] = true
+	}
+	for _, num := range B {
+		setB[num] = true
+	}
+
+	for num := range setA {
+		if !setB[num] {
+			toDelete = append(toDelete, num)
+		}
+	}
+	for num := range setB {
+		if !setA[num] {
+			toAdd = append(toAdd, num)
+		}
+	}
+
+	return toDelete, toAdd
+}
