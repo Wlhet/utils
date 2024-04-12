@@ -1,12 +1,11 @@
 package utils
 
 import (
-	"fmt"
 	"reflect"
 )
 
 // interface转Slice
-func ToSlice(arr interface{}) []interface{} {
+func InterfaceToSlice(arr interface{}) []interface{} {
 	v := reflect.ValueOf(arr)
 	if v.Kind() != reflect.Slice {
 		panic("toslice arr not slice")
@@ -19,12 +18,29 @@ func ToSlice(arr interface{}) []interface{} {
 	return ret
 }
 
-// 创建golang oracle数据库连接字符串
-func NewOracleConnectionString(name, uname, pwd, host string, port int64, dbname string) string {
-	return fmt.Sprintf("oracle://%s:%s@%s:%d/%s", uname, pwd, host, port, dbname)
-}
+// 切片差集交集
+func SliceDifference[T comparable](A, B []T) (notInB, notInA, common []T) {
+	setA := make(map[T]bool)
+	for _, item := range A {
+		setA[item] = true
+	}
+	setB := make(map[T]bool)
+	for _, item := range B {
+		setB[item] = true
+	}
 
-// 创建golang oracle数据库连接字符串
-func NewMysqlConnectionString(name, uname, pwd, host string, port int64, dbname string) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&loc=Local", uname, pwd, host, port, dbname)
+	for _, item := range A {
+		if !setB[item] {
+			notInB = append(notInB, item)
+		} else {
+			common = append(common, item)
+		}
+	}
+
+	for _, item := range B {
+		if !setA[item] {
+			notInA = append(notInA, item)
+		}
+	}
+	return notInB, notInA, common
 }
